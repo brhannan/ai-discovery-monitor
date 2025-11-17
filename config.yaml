@@ -11,31 +11,27 @@ interests:
   - "DevOps"
   - "Embedded software"
 
-# Primary sources to monitor (trusted sources)
+# Primary sources to monitor
 primary_sources:
   blogs:
     - name: "Anthropic Blog"
       url: "https://www.anthropic.com/blog"
-      type: "blog"
     - name: "Engineering at Anthropic"
       url: "https://www.anthropic.com/engineering"
-      type: "blog"
     - name: "Latent Space"
       url: "https://www.latent.space"
-      type: "blog"
     - name: "Simon Willison"
       url: "https://simonwillison.net"
-      type: "blog"
     - name: "Massively parallel procrastination"
       url: "https://blog.fsck.com"
-      type: "blog"
     - name: "Cline blog"
       url: "https://cline.bot/blog"
-      type: "blog"
 
   twitter:
     - handle: "trq212"
     - handle: "_catwu"
+    - handle: "steipete"
+    - handle: "simonw"
 
 # Recommendation thresholds
 recommendation_thresholds:
