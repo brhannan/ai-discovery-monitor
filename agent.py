@@ -3,6 +3,7 @@
 import asyncio
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions, AgentDefinition
@@ -141,15 +142,36 @@ async def run_discovery_monitor():
         print("\n🔄 Orchestrator is delegating to subagents...\n", flush=True)
         print("-" * 70, flush=True)
 
-        # Stream and display response
+        # Stream and display response, capture for report
         msg_count = 0
+        report_content = []
         print("[STREAMING] Receiving response messages...", flush=True)
         async for msg in client.receive_response():
             msg_count += 1
             if type(msg).__name__ == 'TextBlock':
                 print(msg.text, end="", flush=True)
+                report_content.append(msg.text)
+
+                # Try to extract usage data if available
+                if hasattr(msg, 'usage') and msg.usage:
+                    input_tokens = msg.usage.get('input_tokens', 0)
+                    output_tokens = msg.usage.get('output_tokens', 0)
+                    if input_tokens > 0 or output_tokens > 0:
+                        cost_tracker.log_call("haiku", input_tokens, output_tokens, "orchestrator")
+
             elif type(msg).__name__ == 'ToolUseBlock':
                 print(f"\n[Agent Task: {msg.name}]", flush=True)
+                report_content.append(f"\n[Agent Task: {msg.name}]\n")
+
+            elif type(msg).__name__ == 'ResultMessage':
+                # Capture cost from result message
+                if hasattr(msg, 'total_cost_usd') and msg.total_cost_usd:
+                    print(f"[COST] Result message reports: ${msg.total_cost_usd:.4f}", flush=True)
+                if hasattr(msg, 'usage') and msg.usage:
+                    input_tokens = msg.usage.get('input_tokens', 0)
+                    output_tokens = msg.usage.get('output_tokens', 0)
+                    if input_tokens > 0 or output_tokens > 0:
+                        cost_tracker.log_call("haiku", input_tokens, output_tokens, "result")
 
             # Log every 5 messages to show progress
             if msg_count % 5 == 0:
@@ -157,6 +179,17 @@ async def run_discovery_monitor():
 
         print(f"\n[COMPLETE] Received {msg_count} messages total", flush=True)
         print("\n" + "-" * 70, flush=True)
+
+        # Save report to file
+        print("[SAVE] Writing report to recommendations.md...", flush=True)
+        report_text = "".join(report_content)
+        with open("recommendations.md", "w") as f:
+            f.write("# AI Discovery Report\n\n")
+            f.write(f"Generated: {datetime.now().isoformat()}\n\n")
+            f.write(report_text)
+            f.write("\n\n")
+            f.write(cost_tracker.get_summary())
+        print("[SAVED] Report written to recommendations.md", flush=True)
 
         # Log cost summary
         print(cost_tracker.get_summary(), flush=True)
