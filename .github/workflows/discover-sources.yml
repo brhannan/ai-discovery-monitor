@@ -1,0 +1,59 @@
+name: AI Discovery Monitor
+
+on:
+  workflow_dispatch:  # Manual trigger via GitHub UI
+  schedule:
+    # Uncomment to run on a schedule (currently disabled)
+    # - cron: '0 9 * * *'  # Daily at 9 AM UTC
+
+jobs:
+  discover-sources:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run AI Discovery Monitor
+        env:
+          TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
+        run: |
+          python monitor.py
+
+      - name: Upload recommendations as artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: ai-discovery-recommendations
+          path: |
+            recommendations.md
+            discovery.db
+          retention-days: 30
+
+      - name: Display recommendations
+        if: always()
+        run: |
+          echo "=== AI Discovery Results ==="
+          if [ -f recommendations.md ]; then
+            cat recommendations.md
+          else
+            echo "No recommendations generated"
+          fi
+
+      - name: Check for errors
+        if: failure()
+        run: |
+          echo "Monitor failed. Check logs above for details."
+          exit 1
