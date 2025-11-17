@@ -2,12 +2,19 @@
 
 import asyncio
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions, AgentDefinition
 
+# Unbuffered output for GitHub Actions
+sys.stdout.flush()
+sys.stderr.flush()
+
 # Load environment variables
 load_dotenv()
+
+print("[INIT] Starting AI Discovery Monitor...", flush=True)
 
 # Paths to prompt files
 PROMPTS_DIR = Path(__file__).parent / "prompts"
@@ -23,6 +30,7 @@ def load_prompt(filename: str) -> str:
 async def run_discovery_monitor():
     """Run the AI Discovery Monitor with Claude SDK and subagents."""
 
+    print("[CHECK] Verifying API key...", flush=True)
     # Check API key first
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("\nError: ANTHROPIC_API_KEY not found.")
@@ -30,12 +38,18 @@ async def run_discovery_monitor():
         print("Get your key at: https://console.anthropic.com/settings/keys\n")
         return
 
+    print("[LOAD] Loading prompts...", flush=True)
     # Load prompts
     orchestrator_prompt = load_prompt("orchestrator.txt")
+    print(f"  - Loaded orchestrator prompt ({len(orchestrator_prompt)} chars)", flush=True)
     researcher_prompt = load_prompt("researcher.txt")
+    print(f"  - Loaded researcher prompt ({len(researcher_prompt)} chars)", flush=True)
     analyzer_prompt = load_prompt("source_analyzer.txt")
+    print(f"  - Loaded analyzer prompt ({len(analyzer_prompt)} chars)", flush=True)
     trend_prompt = load_prompt("trend_detector.txt")
+    print(f"  - Loaded trend detector prompt ({len(trend_prompt)} chars)", flush=True)
     writer_prompt = load_prompt("report_writer.txt")
+    print(f"  - Loaded report writer prompt ({len(writer_prompt)} chars)", flush=True)
 
     # Define specialized subagents
     agents = {
@@ -81,6 +95,7 @@ async def run_discovery_monitor():
         )
     }
 
+    print("[SETUP] Configuring subagents...", flush=True)
     # Configure options with subagents
     options = ClaudeAgentOptions(
         permission_mode="bypassPermissions",
@@ -95,8 +110,10 @@ async def run_discovery_monitor():
     print("=" * 70)
     print("\nOrchestrating specialized agents to discover and analyze AI developments...")
     print(f"Registered subagents: {', '.join(agents.keys())}\n")
+    print("[CONNECT] Initializing Claude SDK client...", flush=True)
 
     async with ClaudeSDKClient(options=options) as client:
+        print("[CONNECTED] Claude SDK client ready", flush=True)
         # Create discovery prompt for the orchestrator
         discovery_prompt = (
             "It's time for your weekly AI discovery report. "
@@ -110,24 +127,34 @@ async def run_discovery_monitor():
             "what's trending, and what it all means for the AI ecosystem."
         )
 
-        print("📋 Sending discovery request to orchestrator...\n")
+        print("📋 Sending discovery request to orchestrator...\n", flush=True)
 
         # Send discovery request
+        print("[QUERY] Sending prompt to orchestrator...", flush=True)
         await client.query(prompt=discovery_prompt)
+        print("[AWAITING] Waiting for orchestrator response...", flush=True)
 
-        print("\n🔄 Orchestrator is delegating to subagents...\n")
-        print("-" * 70)
+        print("\n🔄 Orchestrator is delegating to subagents...\n", flush=True)
+        print("-" * 70, flush=True)
 
         # Stream and display response
+        msg_count = 0
+        print("[STREAMING] Receiving response messages...", flush=True)
         async for msg in client.receive_response():
+            msg_count += 1
             if type(msg).__name__ == 'TextBlock':
                 print(msg.text, end="", flush=True)
             elif type(msg).__name__ == 'ToolUseBlock':
                 print(f"\n[Agent Task: {msg.name}]", flush=True)
 
-        print("\n" + "-" * 70)
-        print("\n✅ Discovery complete!")
-        print("\nReport generated and ready. Check the output above for the full AI Discovery Report.")
+            # Log every 5 messages to show progress
+            if msg_count % 5 == 0:
+                print(f"\n[MSG {msg_count}] Processing messages...", flush=True)
+
+        print(f"\n[COMPLETE] Received {msg_count} messages total", flush=True)
+        print("\n" + "-" * 70, flush=True)
+        print("\n✅ Discovery complete!", flush=True)
+        print("\nReport generated and ready. Check the output above for the full AI Discovery Report.", flush=True)
 
 
 async def main():
