@@ -2,9 +2,9 @@ name: AI Discovery Monitor
 
 on:
   workflow_dispatch:  # Manual trigger via GitHub UI
-  schedule:
-    # Uncomment to run on a schedule (currently disabled)
-    # - cron: '0 9 * * *'  # Daily at 9 AM UTC
+  # Uncomment below to run on a schedule (currently disabled)
+  # schedule:
+  #   - cron: '0 9 * * *'  # Daily at 9 AM UTC
 
 jobs:
   discover-sources:
