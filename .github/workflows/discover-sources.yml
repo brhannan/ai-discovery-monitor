@@ -28,9 +28,10 @@ jobs:
 
       - name: Run AI Discovery Monitor
         env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
         run: |
-          python monitor.py
+          python agent.py
 
       - name: Upload recommendations as artifact
         uses: actions/upload-artifact@v3

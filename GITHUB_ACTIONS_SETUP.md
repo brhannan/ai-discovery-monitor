@@ -13,17 +13,26 @@ This project includes a GitHub Actions workflow that runs the AI Discovery Monit
 
 ## Setup Instructions
 
-### Step 1: Add Twitter API Token as GitHub Secret
+### Step 1: Add Anthropic API Key as GitHub Secret
 
 1. Go to your repo: https://github.com/brhannan/ai-discovery-monitor
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
 4. Fill in:
-   - **Name**: `TWITTER_BEARER_TOKEN`
-   - **Secret**: Paste your Twitter Bearer Token
+   - **Name**: `ANTHROPIC_API_KEY`
+   - **Secret**: Paste your API key from https://console.anthropic.com/settings/keys
 5. Click **Add secret**
 
-### Step 2: (Optional) Configure Schedule
+### Step 2: Add Twitter API Token as GitHub Secret
+
+1. Go to **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Fill in:
+   - **Name**: `TWITTER_BEARER_TOKEN`
+   - **Secret**: Paste your Twitter Bearer Token
+4. Click **Add secret**
+
+### Step 3: (Optional) Configure Schedule
 
 To run automatically on a schedule, edit `.github/workflows/discover-sources.yml`:
 
