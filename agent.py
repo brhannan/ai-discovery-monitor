@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions, AgentDefinition
+from cost_tracker import CostTracker
 
 # Unbuffered output for GitHub Actions
 sys.stdout.flush()
@@ -13,6 +14,9 @@ sys.stderr.flush()
 
 # Load environment variables
 load_dotenv()
+
+# Initialize cost tracker
+cost_tracker = CostTracker()
 
 print("[INIT] Starting AI Discovery Monitor...", flush=True)
 
@@ -153,6 +157,10 @@ async def run_discovery_monitor():
 
         print(f"\n[COMPLETE] Received {msg_count} messages total", flush=True)
         print("\n" + "-" * 70, flush=True)
+
+        # Log cost summary
+        print(cost_tracker.get_summary(), flush=True)
+
         print("\n✅ Discovery complete!", flush=True)
         print("\nReport generated and ready. Check the output above for the full AI Discovery Report.", flush=True)
 
