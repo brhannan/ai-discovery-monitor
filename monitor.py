@@ -47,7 +47,7 @@ class AIDiscoveryMonitor:
 
         for account in primary.get("twitter", []):
             self.db.add_primary_source(
-                name=account["name"],
+                name=f"@{account['handle']}",
                 handle=account["handle"],
                 source_type="twitter"
             )

@@ -3,11 +3,13 @@
 # Your interests/topics to filter by
 interests:
   - "AI agents"
+  - "Claude"
+  - "Claude skills"
   - "Large language models"
   - "AI safety"
-  - "Machine learning tools"
-  - "AI research"
-  - "Neural networks"
+  - "AI and development"
+  - "DevOps"
+  - "Embedded software"
 
 # Primary sources to monitor (trusted sources)
 primary_sources:
@@ -15,22 +17,25 @@ primary_sources:
     - name: "Anthropic Blog"
       url: "https://www.anthropic.com/blog"
       type: "blog"
-    - name: "OpenAI Blog"
-      url: "https://openai.com/blog"
+    - name: "Engineering at Anthropic"
+      url: "https://www.anthropic.com/engineering"
       type: "blog"
-    - name: "The Batch (DeepLearning.AI)"
-      url: "https://www.deeplearning.ai/the-batch"
+    - name: "Latent Space"
+      url: "https://www.latent.space"
+      type: "blog"
+    - name: "Simon Willison"
+      url: "https://simonwillison.net"
+      type: "blog"
+    - name: "Massively parallel procrastination"
+      url: "https://blog.fsck.com"
+      type: "blog"
+    - name: "Cline blog"
+      url: "https://cline.bot/blog"
       type: "blog"
 
   twitter:
-    - name: "Yann LeCun"
-      handle: "ylecun"
-    - name: "Jeremy Howard"
-      handle: "jeremyphoward"
-    - name: "François Chollet"
-      handle: "fchollet"
-    - name: "Andrej Karpathy"
-      handle: "karpathy"
+    - handle: "trq212"
+    - handle: "_catwu"
 
 # Recommendation thresholds
 recommendation_thresholds:
@@ -42,9 +47,6 @@ recommendation_thresholds:
 schedule:
   frequency: "daily"  # "hourly", "daily", "weekly"
   time: "09:00"  # Time to run (HH:MM, 24-hour format)
-
-# Twitter API credentials (set via environment variables)
-# TWITTER_BEARER_TOKEN=your_token_here
 
 # Output settings
 notifications:
