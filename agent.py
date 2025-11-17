@@ -148,7 +148,9 @@ async def run_discovery_monitor():
         print("[STREAMING] Receiving response messages...", flush=True)
         async for msg in client.receive_response():
             msg_count += 1
-            if type(msg).__name__ == 'TextBlock':
+            msg_type = type(msg).__name__
+
+            if msg_type == 'TextBlock':
                 print(msg.text, end="", flush=True)
                 report_content.append(msg.text)
 
@@ -159,11 +161,23 @@ async def run_discovery_monitor():
                     if input_tokens > 0 or output_tokens > 0:
                         cost_tracker.log_call("haiku", input_tokens, output_tokens, "orchestrator")
 
-            elif type(msg).__name__ == 'ToolUseBlock':
+            elif msg_type == 'ToolUseBlock':
                 print(f"\n[Agent Task: {msg.name}]", flush=True)
                 report_content.append(f"\n[Agent Task: {msg.name}]\n")
 
-            elif type(msg).__name__ == 'ResultMessage':
+            elif msg_type == 'AssistantMessage':
+                # AssistantMessage contains content blocks (TextBlock, ToolUseBlock, etc)
+                print(f"[AssistantMessage] Processing content blocks...", flush=True)
+                for block in msg.content:
+                    block_type = type(block).__name__
+                    if block_type == 'TextBlock':
+                        print(block.text, end="", flush=True)
+                        report_content.append(block.text)
+                    elif block_type == 'ToolUseBlock':
+                        print(f"\n[Tool: {block.name}]", flush=True)
+                        report_content.append(f"\n[Tool: {block.name}]\n")
+
+            elif msg_type == 'ResultMessage':
                 # Capture cost from result message
                 if hasattr(msg, 'total_cost_usd') and msg.total_cost_usd:
                     print(f"[COST] Result message reports: ${msg.total_cost_usd:.4f}", flush=True)
@@ -172,6 +186,10 @@ async def run_discovery_monitor():
                     output_tokens = msg.usage.get('output_tokens', 0)
                     if input_tokens > 0 or output_tokens > 0:
                         cost_tracker.log_call("haiku", input_tokens, output_tokens, "result")
+
+            else:
+                # Log any other message types we encounter
+                print(f"[{msg_type}] Message received", flush=True)
 
             # Log every 5 messages to show progress
             if msg_count % 5 == 0:
