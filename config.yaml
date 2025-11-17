@@ -1,0 +1,52 @@
+# AI Discovery Monitor Configuration
+
+# Your interests/topics to filter by
+interests:
+  - "AI agents"
+  - "Large language models"
+  - "AI safety"
+  - "Machine learning tools"
+  - "AI research"
+  - "Neural networks"
+
+# Primary sources to monitor (trusted sources)
+primary_sources:
+  blogs:
+    - name: "Anthropic Blog"
+      url: "https://www.anthropic.com/blog"
+      type: "blog"
+    - name: "OpenAI Blog"
+      url: "https://openai.com/blog"
+      type: "blog"
+    - name: "The Batch (DeepLearning.AI)"
+      url: "https://www.deeplearning.ai/the-batch"
+      type: "blog"
+
+  twitter:
+    - name: "Yann LeCun"
+      handle: "ylecun"
+    - name: "Jeremy Howard"
+      handle: "jeremyphoward"
+    - name: "François Chollet"
+      handle: "fchollet"
+    - name: "Andrej Karpathy"
+      handle: "karpathy"
+
+# Recommendation thresholds
+recommendation_thresholds:
+  min_citation_count: 2  # Must be cited by at least N primary sources
+  max_source_age_days: 90  # Only consider sources active in last 90 days
+  relevance_score_min: 0.7  # 0-1 scale, higher = more relevant to your interests
+
+# Scheduler settings
+schedule:
+  frequency: "daily"  # "hourly", "daily", "weekly"
+  time: "09:00"  # Time to run (HH:MM, 24-hour format)
+
+# Twitter API credentials (set via environment variables)
+# TWITTER_BEARER_TOKEN=your_token_here
+
+# Output settings
+notifications:
+  format: "markdown"  # "markdown", "json", "email"
+  output_file: "recommendations.md"
