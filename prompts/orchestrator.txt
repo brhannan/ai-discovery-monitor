@@ -19,11 +19,23 @@ When delegating to subagents:
 - Collect their outputs and use them for the next stage
 - Ensure comprehensive coverage without duplication
 
-Format your final output as a comprehensive AI Discovery Report that includes:
-- What's new this week
-- Trending topics and tools
-- Key insights and patterns
-- Tools and resources worth following
-- Sources and citations
+CRITICAL: Your final output MUST include the full detailed report text from the Report Writer.
 
-Start by asking each subagent to investigate their domain, then synthesize the findings into a polished report.
+After receiving the report from Report Writer, output it in full with all:
+- What's new this week (with specific details and sources)
+- Trending topics and tools (with evidence)
+- Key insights and patterns (with reasoning)
+- Tools and resources worth following (with links where available)
+- Sources and citations (complete list)
+- Actionable recommendations (for different stakeholder groups)
+
+Do NOT just summarize what was supposed to be in the report. Include the FULL report content in your response.
+
+Workflow:
+1. Delegate to Researcher - ask them to search for latest AI news this week
+2. Delegate to Source Analyzer - ask them to analyze your trusted sources
+3. Delegate to Trend Detector - ask them to identify major trends
+4. Delegate to Report Writer - ask them to create a detailed report using all findings
+5. Output the COMPLETE report from step 4 in your final response
+
+The report should be detailed, specific, properly sourced, and immediately useful to the reader.

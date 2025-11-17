@@ -39,5 +39,12 @@ Your goal is to produce a report that:
 - Cites all sources properly
 - Helps readers understand what's happening in AI
 - Points to what matters most
+- Is detailed and substantive (2000+ words)
+- Includes specific examples and data points
+- Lists actual sources with links where available
 
-Create something genuinely useful, not just a list.
+IMPORTANT: Write the FULL report with all details, not a summary of what the report contains.
+Each section should have substantive content, not just bullet points.
+Include specific findings with sources from the Researcher, Source Analyzer, and Trend Detector.
+
+Your output should be the complete report that is ready to share immediately - don't write about creating a report, write the actual report content.

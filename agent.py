@@ -162,20 +162,22 @@ async def run_discovery_monitor():
                         cost_tracker.log_call("haiku", input_tokens, output_tokens, "orchestrator")
 
             elif msg_type == 'ToolUseBlock':
-                print(f"\n[Agent Task: {msg.name}]", flush=True)
-                report_content.append(f"\n[Agent Task: {msg.name}]\n")
+                # Log to stdout for visibility but don't add to report (too noisy)
+                print(f"[{msg.name}]", end=" ", flush=True)
 
             elif msg_type == 'AssistantMessage':
                 # AssistantMessage contains content blocks (TextBlock, ToolUseBlock, etc)
-                print(f"[AssistantMessage] Processing content blocks...", flush=True)
                 for block in msg.content:
                     block_type = type(block).__name__
                     if block_type == 'TextBlock':
-                        print(block.text, end="", flush=True)
-                        report_content.append(block.text)
+                        # Only add non-empty text to report (filter out just whitespace)
+                        text = block.text
+                        if text and text.strip():
+                            print(text, end="", flush=True)
+                            report_content.append(text)
                     elif block_type == 'ToolUseBlock':
-                        print(f"\n[Tool: {block.name}]", flush=True)
-                        report_content.append(f"\n[Tool: {block.name}]\n")
+                        # Log tool use but don't add to report
+                        print(f"[{block.name}]", end=" ", flush=True)
 
             elif msg_type == 'ResultMessage':
                 # Capture cost from result message
