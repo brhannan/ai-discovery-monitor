@@ -200,19 +200,15 @@ async def run_discovery_monitor():
         print(f"\n[COMPLETE] Received {msg_count} messages total", flush=True)
         print("\n" + "-" * 70, flush=True)
 
-        # Save report to file
+        # Save report to file (without cost summary)
         print("[SAVE] Writing report to recommendations.md...", flush=True)
         report_text = "".join(report_content)
         with open("recommendations.md", "w") as f:
-            f.write("# AI Discovery Report\n\n")
-            f.write(f"Generated: {datetime.now().isoformat()}\n\n")
             f.write(report_text)
-            f.write("\n\n")
-            f.write(cost_tracker.get_summary())
         print("[SAVED] Report written to recommendations.md", flush=True)
 
-        # Log cost summary
-        print(cost_tracker.get_summary(), flush=True)
+        # Log cost summary to console only (not in file)
+        print("\n" + cost_tracker.get_summary(), flush=True)
 
         print("\n✅ Discovery complete!", flush=True)
         print("\nReport generated and ready. Check the output above for the full AI Discovery Report.", flush=True)
