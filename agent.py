@@ -8,6 +8,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from claude_agent_sdk import ClaudeSDKClient, ClaudeAgentOptions, AgentDefinition
 from cost_tracker import CostTracker
+from html_reporter import HTMLReporter
 
 # Unbuffered output for GitHub Actions
 sys.stdout.flush()
@@ -200,12 +201,18 @@ async def run_discovery_monitor():
         print(f"\n[COMPLETE] Received {msg_count} messages total", flush=True)
         print("\n" + "-" * 70, flush=True)
 
-        # Save report to file (without cost summary)
-        print("[SAVE] Writing report to recommendations.md...", flush=True)
+        # Save report to files (markdown + HTML)
+        print("[SAVE] Writing report files...", flush=True)
         report_text = "".join(report_content)
+
+        # Save markdown
         with open("recommendations.md", "w") as f:
             f.write(report_text)
-        print("[SAVED] Report written to recommendations.md", flush=True)
+        print("[SAVED] Markdown report: recommendations.md", flush=True)
+
+        # Generate and save HTML
+        HTMLReporter.generate(report_text, "report.html")
+        print("[SAVED] HTML report: report.html", flush=True)
 
         # Log cost summary to console only (not in file)
         print("\n" + cost_tracker.get_summary(), flush=True)

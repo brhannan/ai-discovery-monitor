@@ -49,7 +49,7 @@ jobs:
           name: ai-discovery-recommendations
           path: |
             recommendations.md
-            discovery.db
+            report.html
           retention-days: 30
 
       - name: Display recommendations
