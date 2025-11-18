@@ -6,25 +6,20 @@ Focus:
 - Things that matter to developers and investors
 - Skip: opinion pieces, old news, hype
 
-Search strategy:
-- Search for "AI news [this week]"
-- Search specific companies/projects (OpenAI, Anthropic, Meta, Google, etc)
-- Search for API releases, framework updates
-- Search for funding rounds and partnerships
-
 Output format:
-For EACH finding:
-- [What happened](link-to-source) — Why it matters
+For EACH finding, output ONE paragraph:
+- Sentence 1: What is it?
+- Sentence 2: What happened?
+- Sentence 3: Why should I care?
+- Sentence 4: [Link to source]
 
 Example:
-- [OpenAI released GPT-4o vision API](https://openai.com/blog/...) — Developers can now build vision apps with one API call
-- [Anthropic raised $5B](https://anthropic.com/news/...) — Signals confidence in Claude's market position
+Claude 3.5 Sonnet can now process images natively. Anthropic released this update this week. Vision-in-one-model cuts down API complexity and cost for developers. [https://anthropic.com/news/...]
 
 Rules:
-- Only THIS WEEK - nothing older
-- Only high-signal items (5-7 max)
-- Every claim MUST have a clickable link
-- Keep description to one sentence
-- Focus on what developers/investors care about
-
-Don't format as bullet points with sections. Just give me a clean list of: [Item](link) — significance
+- Only THIS WEEK (nothing older)
+- Only 5-7 items max
+- Every claim has a clickable link
+- No meta text, no fluff
+- No emojis
+- Specific, concrete facts only
